@@ -11,6 +11,9 @@ function cynwrigLog(str){
 }
 
 var isNode = false, isTty =false, isDebugMode = false;
+var oldConsoleWarn = console.warn;
+var oldConsoleError = console.error;
+var oldConsoleInfo = console.info;
 
 //Select Graphic Rendition - http://en.wikipedia.org/wiki/ANSI_escape_code
 //blink is not supported in some Terminals
@@ -79,20 +82,46 @@ for (var index = 0; index < sgr.length; index++){
   })(color);
 }
 
-console.log("this is red".green().yellowBG());
-console.log("this is red".red().blueBG().inverse());
-console.log("this is red".black().magentaBG());
+addProperty('textColor', function(){
+  return function(color){
+    if(color && (color !== null) && (!isNaN(color))){
+      if((color >= 0) && (color <= 255)){
+        return '\x1B[38;5;' + color + 'm' + this + '\x1B[39m';
+      }
+    }
+    return '' + this;
+  }
+});
 
+addProperty('textBGColor', function(){
+  return function(color){
+    if(color && (color !== null) && (!isNaN(color))){
+      if((color >= 0) && (color <= 255)){
+        return '\x1B[48;5;' + color + 'm' + this + '\x1B[49m';
+      }
+    }
+    return '' + this;
+  }
+});
 
+function colorMyConsole(){
+    if(isNode){
+      console.warn = function(str){
+          var newString = str.textColor(178);
+          oldConsoleWarn(newString);
+      }
 
+      console.error = function(str){
+          var newString = str.textColor(196);
+          oldConsoleError(newString);
+      }
 
-
-
-
-
-
-
-
+      console.info = function(str){
+          var newString = str.textColor(39);
+          oldConsoleInfo(newString);
+      }
+    }
+}
 
 //export Cynwrig
 if (isNode){
@@ -104,12 +133,13 @@ if (isNode){
         isDebugMode = false;
      },
      'testCynwrig': function(){
-        cynwrigLog('say something nice');
+        console.log('Hello, my name is Cynwrig'.textColor(208).textBGColor(237));
      },
      'seeAllColors': function(){
        for(var i=0; i < 256; i++){
          console.log('\x1B[38;5;' + i + 'm'  + 'color #' + i + '\x1B[0m'); //todo: use function
        }
-     }
+     },
+     'colorMyConsole': colorMyConsole
   }
 }
