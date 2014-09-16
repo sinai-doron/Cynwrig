@@ -89,7 +89,7 @@ for (var index = 0; index < sgr.length; index++){
 
 addProperty('textColor', function(){
   return function(color){
-    if(color && (color !== null) && (!isNaN(color))){
+    if((color !== null) && (!isNaN(color))){
       if((color >= 0) && (color <= 255)){
         return '\x1B[38;5;' + color + 'm' + this + '\x1B[39m';
       }
@@ -152,7 +152,7 @@ if (isNode){
      },
      'seeAllColors': function(){
        for(var i=0; i < 256; i++){
-         console.log('\x1B[38;5;' + i + 'm'  + 'color #' + i + '\x1B[0m'); //todo: use function
+         console.log(('color #' + i).textColor(i));
        }
      },
      'colorMyConsole': colorMyConsole,
