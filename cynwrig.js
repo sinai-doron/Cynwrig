@@ -10,10 +10,15 @@ function cynwrigLog(str){
   }
 }
 
-var isNode = false, isTty =false, isDebugMode = false;
-var oldConsoleWarn = console.warn;
-var oldConsoleError = console.error;
-var oldConsoleInfo = console.info;
+var isNode = false, isTty =false, isDebugMode = false, hasConsoles = false;
+var oldConsoleWarn, oldConsoleError, oldConsoleInfo;
+if(console && console.warn && console.info && console.error){
+  oldConsoleWarn = console.warn;
+  oldConsoleError = console.error;
+  oldConsoleInfo = console.info;
+  hasConsoles = true;
+}
+
 
 //Select Graphic Rendition - http://en.wikipedia.org/wiki/ANSI_escape_code
 //blink is not supported in some Terminals
@@ -106,27 +111,31 @@ addProperty('textBGColor', function(){
 
 function colorMyConsole(){
     if(isNode){
-      console.warn = function(str){
-          var newString = str.textColor(178);
-          oldConsoleWarn(newString);
-      }
+      if(hasConsoles){
+        console.warn = function(str){
+            var newString = str.textColor(178);
+            oldConsoleWarn(newString);
+        }
 
-      console.error = function(str){
-          var newString = str.textColor(196);
-          oldConsoleError(newString);
-      }
+        console.error = function(str){
+            var newString = str.textColor(196);
+            oldConsoleError(newString);
+        }
 
-      console.info = function(str){
-          var newString = str.textColor(39);
-          oldConsoleInfo(newString);
+        console.info = function(str){
+            var newString = str.textColor(39);
+            oldConsoleInfo(newString);
+        }
       }
     }
 }
 
 function dontColorMyConsole(){
-  console.warn = oldConsoleWarn;
-  console.info = oldConsoleInfo;
-  console.error = oldConsoleError;
+  if(hasConsoles){
+    console.warn = oldConsoleWarn;
+    console.info = oldConsoleInfo;
+    console.error = oldConsoleError;
+  }
 }
 
 //export Cynwrig
