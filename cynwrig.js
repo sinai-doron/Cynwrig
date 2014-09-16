@@ -123,6 +123,12 @@ function colorMyConsole(){
     }
 }
 
+function dontColorMyConsole(){
+  console.warn = oldConsoleWarn;
+  console.info = oldConsoleInfo;
+  console.error = oldConsoleError;
+}
+
 //export Cynwrig
 if (isNode){
   module.exports = {
@@ -140,6 +146,7 @@ if (isNode){
          console.log('\x1B[38;5;' + i + 'm'  + 'color #' + i + '\x1B[0m'); //todo: use function
        }
      },
-     'colorMyConsole': colorMyConsole
+     'colorMyConsole': colorMyConsole,
+     'dontColorMyConsole' : dontColorMyConsole
   }
 }
