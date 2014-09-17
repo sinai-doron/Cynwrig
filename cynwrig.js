@@ -126,7 +126,7 @@ function colorMyConsole(){
     var infoColor = 39;
     var warnColor = 178;
     var errorColor = 196;
-    var isWindows = process.platform.indexOf('win') > -1;
+    var isWindows = (process.platform.indexOf('win32') > -1) || (process.platform.indexOf('win64') > -1);
     if(isNode){
       if(hasConsoles){
           if(isWindows){
