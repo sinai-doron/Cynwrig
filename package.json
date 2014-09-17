@@ -1,6 +1,6 @@
 {
-  "name": "Cynwrig",
-  "version": "0.0.1",
+  "name": "cynwrig",
+  "version": "0.0.2",
   "description": "Add colors to npm console",
   "main": "cynwrig.js",
   "scripts": {

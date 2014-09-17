@@ -10,7 +10,7 @@ function cynwrigLog(str){
   }
 }
 
-var isNode = false, isTty =false, isDebugMode = false, hasConsoles = false;
+var isNode = false, isTty =false, isDebugMode = false, hasConsoles = false, propAvail=false;
 var oldConsoleWarn, oldConsoleError, oldConsoleInfo;
 if(console && console.warn && console.info && console.error){
   oldConsoleWarn = console.warn;
@@ -76,16 +76,39 @@ function addProperty(prop, func){
   });
 }
 
-for (var index = 0; index < sgr.length; index++){
-  var color = sgr[index];
-  (function(color){
-    addProperty(sgr[index], function(){
-      return function() {
-        return '\x1B[' +styles[color][0] + 'm' + this + '\x1B[' +styles[color][1] + 'm';
-      }
-    });
-  })(color);
+//we want to avoid detecting node bold String property
+for (var index = 1; index < sgr.length; index++){
+  var style = sgr[index];
+  if(String.prototype.hasOwnProperty(style)){
+    propAvail = true;
+    break;
+  }
+
 }
+
+if(propAvail){
+  for (var index = 0; index < sgr.length; index++){
+    var color = sgr[index];
+    (function(color){
+      addProperty(sgr[index], function(){
+        return '\x1B[' +styles[color][0] + 'm' + this + '\x1B[' +styles[color][1] + 'm';
+      });
+    })(color);
+  }
+}
+else{
+  for (var index = 0; index < sgr.length; index++){
+    var color = sgr[index];
+    (function(color){
+      addProperty(sgr[index], function(){
+        return function() {
+          return '\x1B[' +styles[color][0] + 'm' + this + '\x1B[' +styles[color][1] + 'm';
+        }
+      });
+    })(color);
+  }
+}
+
 
 addProperty('textColor', function(){
   return function(color){
