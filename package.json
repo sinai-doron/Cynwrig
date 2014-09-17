@@ -1,0 +1,25 @@
+{
+  "name": "Cynwrig",
+  "version": "0.0.1",
+  "description": "Add colors to npm console",
+  "main": "cynwrig.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sinai-doron/Cynwrig.git"
+  },
+  "keywords": [
+    "console",
+    "colors",
+    "node",
+    "terminal"
+  ],
+  "author": "Doron Sinai",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sinai-doron/Cynwrig/issues"
+  },
+  "homepage": "https://github.com/sinai-doron/Cynwrig"
+}

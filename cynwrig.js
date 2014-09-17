@@ -156,6 +156,11 @@ if (isNode){
        }
      },
      'colorMyConsole': colorMyConsole,
-     'dontColorMyConsole' : dontColorMyConsole
+     'unColorMyConsole' : dontColorMyConsole
   }
 }
+
+
+//TODO: write to chrome console in colors?
+//TODO: rainbow?
+//TODO: release to npm repo

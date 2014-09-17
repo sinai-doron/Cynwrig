@@ -11,7 +11,7 @@ cynwrig.colorMyConsole();
 console.error('error');
 console.info('info');
 console.warn('warn');
-cynwrig.dontColorMyConsole();
+cynwrig.unColorMyConsole();
 console.error('error');
 console.info('info');
 console.warn('warn');
