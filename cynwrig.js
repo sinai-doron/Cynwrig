@@ -11,6 +11,7 @@ function cynwrigLog(str){
 }
 
 var isNode = false, isTty =false, isDebugMode = false, hasConsoles = false;
+var isWindows = (process.platform.indexOf('win32') > -1) || (process.platform.indexOf('win64') > -1);
 var oldConsoleWarn, oldConsoleError, oldConsoleInfo;
 if(console && console.warn && console.info && console.error){
   oldConsoleWarn = console.warn;
@@ -104,7 +105,10 @@ addProperty('textColor', function(){
   return function(color){
     if((color !== null) && (!isNaN(color))){
       if((color >= 0) && (color <= 255)){
-        return '\x1B[38;5;' + color + ';49m' + this + '\x1B[39m';
+        if(isWindows){
+          return '\x1B[38;5;' + color + ';49m' + this + '\x1B[39m';  
+        }
+        return '\x1B[38;5;' + color + 'm' + this + '\x1B[39m';
       }
     }
     return '' + this;
@@ -126,7 +130,6 @@ function colorMyConsole(){
     var infoColor = 39;
     var warnColor = 178;
     var errorColor = 196;
-    var isWindows = (process.platform.indexOf('win32') > -1) || (process.platform.indexOf('win64') > -1);
     if(isNode){
       if(hasConsoles){
           if(isWindows){

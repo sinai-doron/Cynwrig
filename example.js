@@ -33,10 +33,13 @@ console.log("hello".blueBG.yellow);
 console.log("hello".magentaBG.red);
 console.log("hello".whiteBG.black);
 
+console.log("textColor".textColor(23).textBGColor(88));
+/*
 console.error('error');
 console.info('info');
 console.warn('warn');
 cynwrig.colorMyConsole();
+console.log(process.platform)
 console.error('error');
 console.info('info');
 console.warn('warn');
@@ -44,3 +47,5 @@ cynwrig.unColorMyConsole();
 console.error('error');
 console.info('info');
 console.warn('warn');
+
+cynwrig.seeAllColors();*/
