@@ -10,7 +10,7 @@ function cynwrigLog(str){
   }
 }
 
-var isNode = false, isTty =false, isDebugMode = false, hasConsoles = false, propAvail=false;
+var isNode = false, isTty =false, isDebugMode = false, hasConsoles = false;
 var oldConsoleWarn, oldConsoleError, oldConsoleInfo;
 if(console && console.warn && console.info && console.error){
   oldConsoleWarn = console.warn;
@@ -76,17 +76,7 @@ function addProperty(prop, func){
   });
 }
 
-//we want to avoid detecting node bold String property
-for (var index = 1; index < sgr.length; index++){
-  var style = sgr[index];
-  if(String.prototype.hasOwnProperty(style)){
-    propAvail = true;
-    break;
-  }
 
-}
-
-if(propAvail){
   for (var index = 0; index < sgr.length; index++){
     var color = sgr[index];
     (function(color){
@@ -95,8 +85,9 @@ if(propAvail){
       });
     })(color);
   }
-}
-else{
+
+/*
+//if cynwrig prefered as method and not proprties un mark this and mark the block above
   for (var index = 0; index < sgr.length; index++){
     var color = sgr[index];
     (function(color){
@@ -107,14 +98,13 @@ else{
       });
     })(color);
   }
-}
-
+*/
 
 addProperty('textColor', function(){
   return function(color){
     if((color !== null) && (!isNaN(color))){
       if((color >= 0) && (color <= 255)){
-        return '\x1B[38;5;' + color + 'm' + this + '\x1B[39m';
+        return '\x1B[38;5;' + color + ';49m' + this + '\x1B[39m';
       }
     }
     return '' + this;
@@ -133,20 +123,30 @@ addProperty('textBGColor', function(){
 });
 
 function colorMyConsole(){
+    var infoColor = 39;
+    var warnColor = 178;
+    var errorColor = 196;
+    var isWindows = process.platform.indexOf('win') > -1;
     if(isNode){
       if(hasConsoles){
+          if(isWindows){
+            infoColor = 94;
+            warnColor = 93;
+            errorColor = 91;
+          }
+
         console.warn = function(str){
-            var newString = str.textColor(178);
+            var newString = str.textColor(warnColor);
             oldConsoleWarn(newString);
         }
 
         console.error = function(str){
-            var newString = str.textColor(196);
+            var newString = str.textColor(errorColor);
             oldConsoleError(newString);
         }
 
         console.info = function(str){
-            var newString = str.textColor(39);
+            var newString = str.textColor(infoColor);
             oldConsoleInfo(newString);
         }
       }
